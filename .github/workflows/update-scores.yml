@@ -2,9 +2,11 @@ name: Update EuroLeague Scores
 
 on:
   schedule:
-    # Κάθε μέρα στις 06:00 UTC (09:00 ώρα Ελλάδας)
+    # Πρωί (09:00 GR) — ενημέρωση για τα χθεσινά βραδινά ματς
     - cron: '0 6 * * *'
-  workflow_dispatch:   # Για να μπορείς να το τρέξεις manual
+    # Βράδυ (00:30 GR επόμενης μέρας) — ενημέρωση μετά τα σημερινά ματς
+    - cron: '30 21 * * *'
+  workflow_dispatch:   # Για manual trigger
 
 jobs:
   update:
