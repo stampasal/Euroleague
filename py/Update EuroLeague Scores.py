@@ -150,7 +150,10 @@ def cleanup_old_backups(keep=30):
         log(f"Διαγράφηκε παλιό backup: {old}", "🗑️")
 
 def open_html():
-    """Ανοίγει το EuroLeague.html στον default browser."""
+    """Ανοίγει το EuroLeague.html στον default browser (μόνο τοπικά)."""
+    # Skip στο GitHub Actions — δεν υπάρχει browser εκεί
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        return
     import webbrowser
     if os.path.exists(HTML_PATH):
         webbrowser.open(f"file:///{HTML_PATH.replace(os.sep, '/')}")
@@ -777,5 +780,7 @@ if __name__ == "__main__":
         print(f"\n✗ Σφάλμα: {e}")
         import traceback
         traceback.print_exc()
-    if os.name == "nt":
+        sys.exit(1)   # ← ΣΗΜΑΝΤΙΚΟ για GitHub Actions
+    # Το input() τρέχει ΜΟΝΟ όταν το script τρέχει τοπικά σε Windows
+    if os.name == "nt" and sys.stdin.isatty() and not os.environ.get("GITHUB_ACTIONS"):
         input("\nΠάτα Enter για κλείσιμο...")
